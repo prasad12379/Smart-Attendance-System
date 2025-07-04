@@ -1,37 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Report Result</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="css/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report Result | Smart Attendance</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script defer src="js/app.js"></script>
 </head>
 <body>
   <header class="navbar">
-    <h1 class="logo">📈 Attendance Report Results</h1>
+    <h1 class="logo">📁 Report Result</h1>
+    <nav class="nav-links">
+      <a href="index.html">🏠 Home</a>
+      <a href="help.html">❓ Help</a>
+      <a href="about.html">ℹ️ About</a>
+      <a href="contact.html">📞 Contact</a>
+    </nav>
   </header>
 
   <main class="container">
-    <section id="result-panel" class="panel">
-      <h2 id="panel-title">Report</h2>
-      <form id="query-form" class="report-form hidden">
-        <div id="student-field" class="form-field hidden">
-          <label for="student">Student Name or ID:</label>
-          <input type="text" id="student" name="student" required />
-        </div>
-        <div id="date-field" class="form-field hidden">
-          <label for="date">Date:</label>
-          <input type="date" id="date" name="date" required />
-        </div>
-        <button type="submit" class="btn">Submit</button>
-      </form>
+    <h2 id="panel-title">📁 Report Panel</h2>
 
-      <div id="result-output" class="panel hidden">
-        <p><strong>Result will be shown here after form submission.</strong></p>
-      </div>
-    </section>
+    <form id="query-form" class="hidden">
+      <div id="student-field" class="hidden">
+        <label for="student">Student Name:</label><br>
+        <input type="text" id="student" name="student" placeholder="Enter student name">
+      </div><br>
+
+      <div id="date-field" class="hidden">
+        <label for="date">Date:</label><br>
+        <input type="date" id="date" name="date">
+      </div><br>
+
+      <button type="submit" class="btn">Submit</button>
+    </form>
+
+    <div id="result-output" class="hidden">
+      <!-- JS will populate this area -->
+    </div>
   </main>
-
-  <script src="js/app.js"></script>
 </body>
 </html>

@@ -1,42 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Smart Attendance System</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css">
+  <script defer src="js/app.js"></script>
 </head>
 <body>
   <header class="navbar">
-    <h1 class="logo">🧠 Smart Attendance System</h1>
-    <nav>
-      <a href="#">🏠 Home</a>
-      <a href="#">❓ Help</a>
-      <a href="#">ℹ️ About</a>
-      <a href="#">📞 Contact</a>
+    <h1 class="logo">📚 Smart Attendance System</h1>
+    <nav class="nav-links">
+      <a href="index.html">🏠 Home</a>
+      <a href="help.html">❓ Help</a>
+      <a href="about.html">ℹ️ About</a>
+      <a href="contact.html">📞 Contact</a>
     </nav>
   </header>
 
   <main class="grid-container">
     <div class="card">
-      <img src="assets/icons/user.svg" class="icon" />
+      <img src="assets/icons/user.svg" width="60" alt="Register Icon" />
       <h2>Student Registration</h2>
-      <p>Register a student using camera and face detection.</p>
-      <button onclick="window.location.href='python_register.html'" class="btn">Get Started</button>
+      <p>Register new students via camera</p>
+      <button class="btn" onclick="window.location.href='python_register.html'">Get Started</button>
     </div>
-
     <div class="card">
-      <img src="assets/icons/camera.svg" class="icon" />
+      <img src="assets/icons/camera.svg" width="60" alt="Camera Icon" />
       <h2>Live Capture</h2>
-      <p>Start camera to detect and mark attendance live.</p>
-      <button onclick="window.location.href='python_live.html'" class="btn">Start Capture</button>
+      <p>Take live attendance</p>
+      <button class="btn" onclick="window.location.href='python_live.html'">Start Capture</button>
     </div>
-
     <div class="card">
-      <img src="assets/icons/chart.svg" class="icon" />
+      <img src="assets/icons/chart.svg" width="60" alt="Report Icon" />
       <h2>View Report</h2>
-      <p>Explore student-wise and date-wise attendance stats.</p>
-      <button onclick="window.location.href='report_dashboard.html'" class="btn">Go to Reports</button>
+      <p>Access student attendance reports</p>
+      <button class="btn" onclick="window.location.href='report_dashboard.html'">Go to Reports</button>
     </div>
   </main>
 </body>

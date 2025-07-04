@@ -1,5 +1,13 @@
+function navigateTo(page) {
+  window.location.href = page;
+}
+
+// ===============================
+// Report Page Script
+// ===============================
 const queryParams = new URLSearchParams(window.location.search);
 const query = queryParams.get('query');
+
 const title = document.getElementById('panel-title');
 const form = document.getElementById('query-form');
 const studentField = document.getElementById('student-field');
@@ -13,7 +21,7 @@ const titles = {
   percentage: "📊 View Student Attendance Percentage"
 };
 
-if (query && titles[query]) {
+if (title && query && titles[query]) {
   title.innerText = titles[query];
   form.classList.remove('hidden');
 
@@ -29,9 +37,10 @@ if (query && titles[query]) {
   } else if (query === 'percentage') {
     studentField.classList.remove('hidden');
   }
-} else {
+} else if (title) {
   title.innerText = "❌ Invalid Query Type";
 }
+
 
 form?.addEventListener('submit', function (e) {
   e.preventDefault();
