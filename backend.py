@@ -50,3 +50,26 @@ def check_attendance(
             }
 
     return {"status": "Absent"}
+
+@app.get('/daily_attendance_/{roll}')
+def check_attendance(
+    roll: str = Path(..., description="Enter RollNo", examples={"example1": {"value": "2114"}})
+):
+    data = load_data()
+    
+    cnt=0
+    dates=""
+    for date in data:
+        for student in data[date]:
+        # Convert both to string for safe comparison
+            if str(student.get("Roll Number")) == str(roll):
+                cnt+=1
+                dates=dates+" , "+date
+                
+            
+    return {
+        "Toatal present Day" : cnt ,
+        "Dates" : dates
+        
+        }
+
