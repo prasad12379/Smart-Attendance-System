@@ -1,0 +1,117 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to bottom right, #ffe259, #ffa751);
+}
+
+.navbar {
+  background: linear-gradient(to right, #ff416c, #7c67f0);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.logo {
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+.navbar nav a {
+  margin-left: 1rem;
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.grid-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.card {
+  background: linear-gradient(to bottom right, #fbeeff, #e0ccff);
+  padding: 2rem;
+  border-radius: 16px;
+  width: 280px;
+  box-shadow: 8px 10px 20px rgba(0,0,0,0.2);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.icon {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 1rem;
+}
+
+.btn {
+  margin-top: 1rem;
+  padding: 0.6rem 1.2rem;
+  background: linear-gradient(to right, #ff00cc, #00ccff);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-weight: 600;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 8px 15px rgba(0,0,0,0.3);
+}
+
+/* report_result page */
+.container {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.1);
+}
+
+.panel h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.report-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field input {
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+#result-output {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: #f7f7f7;
+  border-left: 4px solid #4caf50;
+}
+
+.hidden {
+  display: none;
+}

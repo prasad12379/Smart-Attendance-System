@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Smart Attendance System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <h1 class="logo">🧠 Smart Attendance System</h1>
+    <nav>
+      <a href="#">🏠 Home</a>
+      <a href="#">❓ Help</a>
+      <a href="#">ℹ️ About</a>
+      <a href="#">📞 Contact</a>
+    </nav>
+  </header>
+
+  <main class="grid-container">
+    <div class="card">
+      <img src="assets/icons/user.svg" class="icon" />
+      <h2>Student Registration</h2>
+      <p>Register a student using camera and face detection.</p>
+      <button onclick="window.location.href='python_register.html'" class="btn">Get Started</button>
+    </div>
+
+    <div class="card">
+      <img src="assets/icons/camera.svg" class="icon" />
+      <h2>Live Capture</h2>
+      <p>Start camera to detect and mark attendance live.</p>
+      <button onclick="window.location.href='python_live.html'" class="btn">Start Capture</button>
+    </div>
+
+    <div class="card">
+      <img src="assets/icons/chart.svg" class="icon" />
+      <h2>View Report</h2>
+      <p>Explore student-wise and date-wise attendance stats.</p>
+      <button onclick="window.location.href='report_dashboard.html'" class="btn">Go to Reports</button>
+    </div>
+  </main>
+</body>
+</html>

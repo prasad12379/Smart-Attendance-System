@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Attendance Reports</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <h1 class="logo">📊 Attendance Reports</h1>
+  </header>
+
+  <main class="grid-container">
+    <div class="card">
+      <h2>Total Records</h2>
+      <p>View all attendance entries.</p>
+      <a href="report_result.html?query=total" class="btn">View Total</a>
+    </div>
+
+    <div class="card">
+      <h2>Records by Date</h2>
+      <p>View records for a specific date.</p>
+      <a href="report_result.html?query=date" class="btn">Filter by Date</a>
+    </div>
+
+    <div class="card">
+      <h2>Student on Date</h2>
+      <p>Check if student was present on a date.</p>
+      <a href="report_result.html?query=student_date" class="btn">Check Student</a>
+    </div>
+
+    <div class="card">
+      <h2>Attendance Percentage</h2>
+      <p>See attendance percentage of a student.</p>
+      <a href="report_result.html?query=percentage" class="btn">View Percentage</a>
+    </div>
+  </main>
+</body>
+</html>
