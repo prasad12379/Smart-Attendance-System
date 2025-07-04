@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Attendance System</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+            --success-color: #2ecc71;
+            --danger-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --border-radius: 5px;
+            --box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--dark-color);
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        .tab-btn:hover:not(.active) {
+            background-color: rgba(0,0,0,0.05);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .result-container {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            background-color: var(--light-color);
+        }
+
+        .attendance-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .attendance-table th, .attendance-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .attendance-table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .attendance-table tr:hover {
+            background-color: rgba(0,0,0,0.05);
+        }
+
+        .present {
+            color: var(--success-color);
+            font-weight: bold;
+        }
+
+        .absent {
+            color: var(--danger-color);
+            font-weight: bold;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0,0,0,0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error {
+            color: var(--danger-color);
+            margin-top: 5px;
+        }
+
+        .date-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .date-chip {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab-btn {
+                border-bottom: 1px solid #ddd;
+                border-left: 3px solid transparent;
+            }
+            
+            .tab-btn.active {
+                border-left: 3px solid var(--primary-color);
+                border-bottom: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Smart Attendance System</h1>
+            <p>Track and manage student attendance in real-time</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="overview">Overview</button>
+            <button class="tab-btn" data-tab="daily">Daily Check</button>
+            <button class="tab-btn" data-tab="roll">Roll-wise Summary</button>
+            <button class="tab-btn" data-tab="full">Full Attendance</button>
+            <button class="tab-btn" data-tab="about">About</button>
+        </div>
+
+        <div id="overview" class="tab-content active">
+            <h2>Welcome to Smart Attendance System</h2>
+            <div id="welcome-message" class="result-container">
+                <p>Loading welcome message...</p>
+            </div>
+        </div>
+
+        <div id="daily" class="tab-content">
+            <h2>Daily Attendance Check</h2>
+            <div class="form-group">
+                <label for="date-input">Select Date:</label>
+                <input type="date" id="date-input" required>
+                <div id="date-error" class="error"></div>
+            </div>
+            
+            <div class="form-group">
+                <button id="check-daily-btn">Check Daily Attendance</button>
+                <span id="daily-loading" class="loading" style="display: none;"></span>
+            </div>
+            
+            <div id="daily-result" class="result-container" style="display: none;">
+                <h3>Attendance for <span id="selected-date"></span></h3>
+                <div id="daily-attendance-list"></div>
+            </div>
+            
+            <h3 style="margin-top: 30px;">Check Specific Student</h3>
+            <div class="form-group">
+                <label for="roll-daily-input">Roll Number:</label>
+                <input type="text" id="roll-daily-input" placeholder="Enter roll number" required>
+                <div id="roll-daily-error" class="error"></div>
+            </div>
+            
+            <div class="form-group">
+                <button id="check-specific-btn">Check Status</button>
+                <span id="specific-loading" class="loading" style="display: none;"></span>
+            </div>
+            
+            <div id="specific-result" class="result-container" style="display: none;">
+                <h3>Attendance Status</h3>
+                <p id="specific-status"></p>
+            </div>
+        </div>
+
+        <div id="roll" class="tab-content">
+            <h2>Roll-wise Attendance Summary</h2>
+            <div class="form-group">
+                <label for="roll-input">Roll Number:</label>
+                <input type="text" id="roll-input" placeholder="Enter roll number" required>
+                <div id="roll-error" class="error"></div>
+            </div>
+            
+            <div class="form-group">
+                <button id="check-roll-btn">Check Attendance</button>
+                <span id="roll-loading" class="loading" style="display: none;"></span>
+            </div>
+            
+            <div id="roll-result" class="result-container" style="display: none;">
+                <h3>Attendance Summary for Roll <span id="roll-number"></span></h3>
+                <p>Total Present Days: <span id="total-days" class="present"></span></p>
+                <p>Dates Present:</p>
+                <div id="dates-list" class="date-list"></div>
+            </div>
+        </div>
+
+        <div id="full" class="tab-content">
+            <h2>Full Attendance Records</h2>
+            <div class="form-group">
+                <button id="load-full-btn">Load All Attendance Data</button>
+                <span id="full-loading" class="loading" style="display: none;"></span>
+            </div>
+            
+            <div id="full-result" class="result-container" style="display: none;">
+                <h3>Complete Attendance Records</h3>
+                <div id="attendance-accordion"></div>
+            </div>
+        </div>
+
+        <div id="about" class="tab-content">
+            <h2>About the System</h2>
+            <div id="about-content" class="result-container">
+                <p>Loading system information...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching functionality
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Remove active class from all buttons and contents
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked button and corresponding content
+                    btn.classList.add('active');
+                    const tabId = btn.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                    
+                    // Load data if needed
+                    if (tabId === 'overview' && !welcomeLoaded) {
+                        loadWelcomeMessage();
+                    } else if (tabId === 'about' && !aboutLoaded) {
+                        loadAboutPage();
+                    }
+                });
+            });
+            
+            // Global variables to track loaded states
+            let welcomeLoaded = false;
+            let aboutLoaded = false;
+            
+            // Load welcome message
+            function loadWelcomeMessage() {
+                fetch('http://127.0.0.1:8000/')
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network response was not ok');
+                        return response.json();
+                    })
+                    .then(data => {
+                        document.getElementById('welcome-message').innerHTML = `
+                            <p>${data.message || 'Welcome to the Smart Attendance System'}</p>
+                        `;
+                        welcomeLoaded = true;
+                    })
+                    .catch(error => {
+                        document.getElementById('welcome-message').innerHTML = `
+                            <p class="error">Failed to load welcome message: ${error.message}</p>
+                        `;
+                    });
+            }
+            
+            // Load about page
+            function loadAboutPage() {
+                fetch('http://127.0.0.1:8000/about')
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network response was not ok');
+                        return response.json();
+                    })
+                    .then(data => {
+                        document.getElementById('about-content').innerHTML = `
+                            <h3>${data.message || 'Smart Attendance System'}</h3>
+                            <p>A system to track and manage student attendance.</p>
+                        `;
+                        aboutLoaded = true;
+                    })
+                    .catch(error => {
+                        document.getElementById('about-content').innerHTML = `
+                            <p class="error">Failed to load about information: ${error.message}</p>
+                        `;
+                    });
+            }
+            
+            // Check daily attendance
+            document.getElementById('check-daily-btn').addEventListener('click', function() {
+                const dateInput = document.getElementById('date-input').value;
+                const errorElement = document.getElementById('date-error');
+                
+                if (!dateInput) {
+                    errorElement.textContent = 'Please select a date';
+                    return;
+                }
+                
+                errorElement.textContent = '';
+                document.getElementById('daily-loading').style.display = 'inline-block';
+                document.getElementById('daily-result').style.display = 'none';
+                
+                fetch(`http://127.0.0.1:8000/daily_attendance/${dateInput}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('No attendance data found for this date');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        document.getElementById('daily-loading').style.display = 'none';
+                        document.getElementById('selected-date').textContent = dateInput;
+                        
+                        if (data && data.length > 0) {
+                            let html = '<table class="attendance-table"><thead><tr><th>Roll Number</th><th>Time</th></tr></thead><tbody>';
+                            
+                            data.forEach(student => {
+                                html += `<tr><td>${student["Roll Number"]}</td><td>${student.Time}</td></tr>`;
+                            });
+                            
+                            html += '</tbody></table>';
+                            document.getElementById('daily-attendance-list').innerHTML = html;
+                        } else {
+                            document.getElementById('daily-attendance-list').innerHTML = '<p>No attendance records found for this date.</p>';
+                        }
+                        
+                        document.getElementById('daily-result').style.display = 'block';
+                    })
+                    .catch(error => {
+                        document.getElementById('daily-loading').style.display = 'none';
+                        document.getElementById('daily-attendance-list').innerHTML = `<p class="error">${error.message}</p>`;
+                        document.getElementById('daily-result').style.display = 'block';
+                    });
+            });
+            
+            // Check specific student attendance
+            document.getElementById('check-specific-btn').addEventListener('click', function() {
+                const dateInput = document.getElementById('date-input').value;
+                const rollInput = document.getElementById('roll-daily-input').value.trim();
+                const dateError = document.getElementById('date-error');
+                const rollError = document.getElementById('roll-daily-error');
+                
+                let valid = true;
+                
+                if (!dateInput) {
+                    dateError.textContent = 'Please select a date';
+                    valid = false;
+                } else {
+                    dateError.textContent = '';
+                }
+                
+                if (!rollInput) {
+                    rollError.textContent = 'Please enter a roll number';
+                    valid = false;
+                } else {
+                    rollError.textContent = '';
+                }
+                
+                if (!valid) return;
+                
+                document.getElementById('specific-loading').style.display = 'inline-block';
+                document.getElementById('specific-result').style.display = 'none';
+                
+                fetch(`http://127.0.0.1:8000/daily_attendance/${dateInput}/${rollInput}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            return response.json().then(err => { throw new Error(err.detail || 'Student not found for this date'); });
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        document.getElementById('specific-loading').style.display = 'none';
+                        
+                        if (data.status === "Present") {
+                            document.getElementById('specific-status').innerHTML = 
+                                `<span class="present">Present at ${data.entry_time}</span>`;
+                        } else {
+                            document.getElementById('specific-status').innerHTML = 
+                                `<span class="absent">Absent</span>`;
+                        }
+                        
+                        document.getElementById('specific-result').style.display = 'block';
+                    })
+                    .catch(error => {
+                        document.getElementById('specific-loading').style.display = 'none';
+                        document.getElementById('specific-status').innerHTML = 
+                            `<span class="error">${error.message}</span>`;
+                        document.getElementById('specific-result').style.display = 'block';
+                    });
+            });
+            
+            // Check roll-wise attendance
+            document.getElementById('check-roll-btn').addEventListener('click', function() {
+                const rollInput = document.getElementById('roll-input').value.trim();
+                const errorElement = document.getElementById('roll-error');
+                
+                if (!rollInput) {
+                    errorElement.textContent = 'Please enter a roll number';
+                    return;
+                }
+                
+                errorElement.textContent = '';
+                document.getElementById('roll-loading').style.display = 'inline-block';
+                document.getElementById('roll-result').style.display = 'none';
+                
+                fetch(`http://127.0.0.1:8000/daily_attendance_/${rollInput}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('No attendance records found for this roll number');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        document.getElementById('roll-loading').style.display = 'none';
+                        document.getElementById('roll-number').textContent = rollInput;
+                        
+                        if (data && data.Toatal_present_Day > 0) {
+                            document.getElementById('total-days').textContent = data.Toatal_present_Day;
+                            
+                            const datesList = document.getElementById('dates-list');
+                            datesList.innerHTML = '';
+                            
+                            // Split dates string and remove empty entries
+                            const datesArray = data.Dates.split(',').map(date => date.trim()).filter(date => date);
+                            
+                            datesArray.forEach(date => {
+                                const dateChip = document.createElement('span');
+                                dateChip.className = 'date-chip';
+                                dateChip.textContent = date;
+                                datesList.appendChild(dateChip);
+                            });
+                        } else {
+                            document.getElementById('total-days').textContent = '0';
+                            document.getElementById('dates-list').innerHTML = '<p>No attendance records found.</p>';
+                        }
+                        
+                        document.getElementById('roll-result').style.display = 'block';
+                    })
+                    .catch(error => {
+                        document.getElementById('roll-loading').style.display = 'none';
+                        document.getElementById('roll-result').innerHTML = `<p class="error">${error.message}</p>`;
+                        document.getElementById('roll-result').style.display = 'block';
+                    });
+            });
+            
+            // Load full attendance
+            document.getElementById('load-full-btn').addEventListener('click', function() {
+                document.getElementById('full-loading').style.display = 'inline-block';
+                document.getElementById('full-result').style.display = 'none';
+                
+                fetch('http://127.0.0.1:8000/view')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to load attendance data');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        document.getElementById('full-loading').style.display = 'none';
+                        
+                        if (data && Object.keys(data).length > 0) {
+                            let html = '';
+                            
+                            for (const [date, attendance] of Object.entries(data)) {
+                                html += `
+                                    <div class="accordion-item">
+                                        <h3 style="cursor: pointer; padding: 10px; background-color: #f0f0f0; margin: 5px 0; border-radius: var(--border-radius);">
+                                            ${date} (${attendance.length} students)
+                                        </h3>
+                                        <div style="display: none; padding: 10px; background-color: white; border-radius: var(--border-radius);">
+                                            <table class="attendance-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Roll Number</th>
+                                                        <th>Time</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>`;
+                                
+                                attendance.forEach(student => {
+                                    html += `<tr><td>${student["Roll Number"]}</td><td>${student.Time}</td></tr>`;
+                                });
+                                
+                                html += `</tbody></table></div></div>`;
+                            }
+                            
+                            document.getElementById('attendance-accordion').innerHTML = html;
+                            
+                            // Add click event to accordion items
+                            const accordionItems = document.querySelectorAll('.accordion-item h3');
+                            accordionItems.forEach(item => {
+                                item.addEventListener('click', function() {
+                                    const content = this.nextElementSibling;
+                                    content.style.display = content.style.display === 'none' ? 'block' : 'none';
+                                });
+                            });
+                        } else {
+                            document.getElementById('attendance-accordion').innerHTML = '<p>No attendance records found.</p>';
+                        }
+                        
+                        document.getElementById('full-result').style.display = 'block';
+                    })
+                    .catch(error => {
+                        document.getElementById('full-loading').style.display = 'none';
+                        document.getElementById('attendance-accordion').innerHTML = `<p class="error">${error.message}</p>`;
+                        document.getElementById('full-result').style.display = 'block';
+                    });
+            });
+            
+            // Load initial data
+            loadWelcomeMessage();
+        });
+    </script>
+</body>
+</html>
