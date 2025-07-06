@@ -489,57 +489,64 @@
             
             // Check roll-wise attendance
             document.getElementById('check-roll-btn').addEventListener('click', function() {
-                const rollInput = document.getElementById('roll-input').value.trim();
-                const errorElement = document.getElementById('roll-error');
-                
-                if (!rollInput) {
-                    errorElement.textContent = 'Please enter a roll number';
-                    return;
-                }
-                
-                errorElement.textContent = '';
-                document.getElementById('roll-loading').style.display = 'inline-block';
-                document.getElementById('roll-result').style.display = 'none';
-                
-                fetch(`http://127.0.0.1:8000/daily_attendance_/${rollInput}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('No attendance records found for this roll number');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        document.getElementById('roll-loading').style.display = 'none';
-                        document.getElementById('roll-number').textContent = rollInput;
-                        
-                        if (data && data.Toatal_present_Day > 0) {
-                            document.getElementById('total-days').textContent = data.Toatal_present_Day;
-                            
-                            const datesList = document.getElementById('dates-list');
-                            datesList.innerHTML = '';
-                            
-                            // Split dates string and remove empty entries
-                            const datesArray = data.Dates.split(',').map(date => date.trim()).filter(date => date);
-                            
-                            datesArray.forEach(date => {
-                                const dateChip = document.createElement('span');
-                                dateChip.className = 'date-chip';
-                                dateChip.textContent = date;
-                                datesList.appendChild(dateChip);
-                            });
-                        } else {
-                            document.getElementById('total-days').textContent = '0';
-                            document.getElementById('dates-list').innerHTML = '<p>No attendance records found.</p>';
-                        }
-                        
-                        document.getElementById('roll-result').style.display = 'block';
-                    })
-                    .catch(error => {
-                        document.getElementById('roll-loading').style.display = 'none';
-                        document.getElementById('roll-result').innerHTML = `<p class="error">${error.message}</p>`;
-                        document.getElementById('roll-result').style.display = 'block';
-                    });
-            });
+    const rollInput = document.getElementById('roll-input').value.trim();
+    const errorElement = document.getElementById('roll-error');
+    
+    if (!rollInput) {
+        errorElement.textContent = 'Please enter a roll number';
+        return;
+    }
+    
+    errorElement.textContent = '';
+    document.getElementById('roll-loading').style.display = 'inline-block';
+    document.getElementById('roll-result').style.display = 'none';
+    
+    fetch(`http://127.0.0.1:8000/daily_attendance_/${rollInput}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('No attendance records found');
+            }
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById('roll-loading').style.display = 'none';
+            document.getElementById('roll-number').textContent = rollInput;
+            
+            // Updated to match backend response keys
+            const totalDays = data.total_present_days || data.Toatal_present_Day || 0;
+            document.getElementById('total-days').textContent = totalDays;
+            
+            const datesList = document.getElementById('dates-list');
+            datesList.innerHTML = '';
+            
+            // Handle both array and string formats
+            let datesArray = [];
+            if (Array.isArray(data.Dates)) {
+                datesArray = data.Dates;
+            } else if (typeof data.Dates === 'string') {
+                datesArray = data.Dates.split(',').map(d => d.trim()).filter(d => d);
+            }
+            
+            if (datesArray.length === 0) {
+                datesList.innerHTML = '<p>No attendance records found.</p>';
+            } else {
+                datesArray.forEach(date => {
+                    const dateChip = document.createElement('span');
+                    dateChip.className = 'date-chip';
+                    dateChip.textContent = date;
+                    datesList.appendChild(dateChip);
+                });
+            }
+            
+            document.getElementById('roll-result').style.display = 'block';
+        })
+        .catch(error => {
+            document.getElementById('roll-loading').style.display = 'none';
+            document.getElementById('roll-result').innerHTML = `
+                <p class="error">${error.message}</p>`;
+            document.getElementById('roll-result').style.display = 'block';
+        });
+});
             
             // Load full attendance
             document.getElementById('load-full-btn').addEventListener('click', function() {

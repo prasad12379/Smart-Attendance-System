@@ -17,10 +17,10 @@ app.add_middleware(
 
 
 def load_data():
-    print("📥 Trying to load JSON file...")  
+    print("Trying to load JSON file...")  
     with open('daily_attendance.json', 'r') as f:
         data = json.load(f)
-    print("✅ JSON Loaded Successfully!")    
+    print("JSON Loaded Successfully!")    
     return data
     
 
@@ -75,16 +75,16 @@ def check_attendance(
     data = load_data()
     
     cnt=0
-    dates=""
+    dates=[]
     for date in data:
         for student in data[date]:
-            if (student.get("Roll Number")) == str(roll):
+            if str(student.get("Roll Number")) == str(roll):
                 cnt+=1
-                dates=dates+" , "+date
+                dates.append(date)
                 
             
     return {
-        "Toatal present Day" : cnt ,
+        "total_present_days" : cnt ,
         "Dates" : dates
         
         }
