@@ -1,2 +1,3 @@
 # Smart-Attendance-System
-AI Integrated Attendance System using FastAPI
+AI Integrated Attendance System using Live Camera
+
