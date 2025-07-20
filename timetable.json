@@ -1,0 +1,47 @@
+{
+  "Monday": [
+    { "subject": "TOC-ASK", "start": "08:30", "end": "09:30" },
+    { "subject": "TCP/IP N/W-MDI", "start": "09:30", "end": "10:30" },
+    { "subject": "DBMS Lab-N/W-JSN", "start": "10:45", "end": "12:45", "batch": "T1" },
+    { "subject": "TCP/IP N/W Lab-LAB4-ASK", "start": "10:45", "end": "12:45", "batch": "T2" },
+    { "subject": "TCP/IP N/W Lab-LAB6-XYZ", "start": "10:45", "end": "12:45", "batch": "T3" },
+    { "subject": "DBMS-JSN", "start": "13:20", "end": "14:20" },
+    { "subject": "SPOS-SSW", "start": "14:20", "end": "15:20" }
+  ],
+  "Tuesday": [
+    { "subject": "DBMS Lab-N/W-NRZ", "start": "08:30", "end": "10:30", "batch": "T1" },
+    { "subject": "LP-III Lab-LAB4-SSW", "start": "08:30", "end": "10:30", "batch": "T2" },
+    { "subject": "LP-III Lab-LAB6-XYZ", "start": "08:30", "end": "10:30", "batch": "T3" },
+    { "subject": "TOC-ASK", "start": "10:45", "end": "11:45" },
+    { "subject": "EL-I-ARD", "start": "11:45", "end": "12:45" },
+    { "subject": "SPOS-SSW", "start": "13:20", "end": "14:20" },
+    { "subject": "DBMS-JSN", "start": "14:20", "end": "15:20" }
+  ],
+  "Wednesday": [
+    { "subject": "SPOS-SSW", "start": "08:30", "end": "09:30" },
+    { "subject": "EL-I-ARD", "start": "09:30", "end": "10:30" },
+    { "subject": "TCP/IP N/W Lab-AI-SCP", "start": "10:45", "end": "12:45", "batch": "T1" },
+    { "subject": "DBMS Lab-N/W-NRZ", "start": "10:45", "end": "12:45", "batch": "T2" },
+    { "subject": "TCP/IP N/W Lab-LAB6-XYZ", "start": "10:45", "end": "12:45", "batch": "T3" },
+    { "subject": "DBMS-JSN", "start": "13:20", "end": "14:20" },
+    { "subject": "TNS-AS", "start": "14:20", "end": "15:20" }
+  ],
+  "Thursday": [
+    { "subject": "TCP/IP N/W-MDI", "start": "08:30", "end": "09:30" },
+    { "subject": "TOC-ASK", "start": "09:30", "end": "10:30" },
+    { "subject": "LP-III Lab-LAB3-SSW", "start": "10:45", "end": "12:45", "batch": "T1" },
+    { "subject": "DBMS Lab-N/W-JSN", "start": "10:45", "end": "12:45", "batch": "T2" },
+    { "subject": "LP-III Lab-LAB6-XYZ", "start": "10:45", "end": "12:45", "batch": "T3" },
+    { "subject": "EL-I-ARD", "start": "13:20", "end": "14:20" },
+    { "subject": "SEMINAR AND TECHNICAL", "start": "14:20", "end": "15:20" }
+  ],
+  "Friday": [
+    { "subject": "DBMS-JSN", "start": "08:30", "end": "09:30" },
+    { "subject": "AC-5-RB", "start": "09:30", "end": "10:30" },
+    { "subject": "TOC-ASK", "start": "10:45", "end": "11:45" },
+    { "subject": "TCP/IP N/W-MDI", "start": "11:45", "end": "12:45" },
+    { "subject": "LP-III Lab-LAB3-SSW", "start": "13:20", "end": "15:20", "batch": "T1" },
+    { "subject": "LP-III Lab-LAB4-ARD", "start": "13:20", "end": "15:20", "batch": "T2" },
+    { "subject": "LP-III Lab-LAB6-XYZ", "start": "13:20", "end": "15:20", "batch": "T3" }
+  ]
+}
