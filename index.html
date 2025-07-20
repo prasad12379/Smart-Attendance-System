@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Attendance System</title>
+  <style>
+    :root {
+      --primary: #4361ee;
+      --secondary: #3f37c9;
+      --accent: #4895ef;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --success: #4cc9f0;
+      --danger: #f72585;
+      --warning: #f8961e;
+      --border-radius: 8px;
+      --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f5f7fa;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 2rem 0;
+      text-align: center;
+      margin-bottom: 2rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+    }
+
+    h1 {
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .subtitle {
+      opacity: 0.9;
+      font-weight: 300;
+    }
+
+    .card {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-title {
+      color: var(--primary);
+      margin-bottom: 1rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      border-bottom: 2px solid var(--light);
+      padding-bottom: 0.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--dark);
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    }
+
+    button {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    button:hover {
+      background-color: var(--secondary);
+      transform: translateY(-2px);
+    }
+
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background-color: var(--accent);
+    }
+
+    .btn-danger {
+      background-color: var(--danger);
+    }
+
+    .btn-warning {
+      background-color: var(--warning);
+    }
+
+    .result-container {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border-radius: var(--border-radius);
+      background-color: var(--light);
+      display: none;
+    }
+
+    .result-title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+    }
+
+    .attendance-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    .attendance-table th, .attendance-table td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .attendance-table th {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .attendance-table tr:hover {
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+
+    .present {
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    .absent {
+      color: var(--danger);
+      font-weight: 600;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+      margin-left: 10px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .error {
+      color: var(--danger);
+      margin-top: 0.5rem;
+      font-size: 0.875rem;
+    }
+
+    .date-chip {
+      background-color: var(--accent);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      display: inline-block;
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .flex-row {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .flex-row > * {
+      flex: 1;
+    }
+
+    .alert {
+      padding: 0.75rem 1.25rem;
+      margin-bottom: 1rem;
+      border-radius: var(--border-radius);
+      display: none;
+    }
+
+    .alert-danger {
+      color: #721c24;
+      background-color: #f8d7da;
+      border-color: #f5c6cb;
+    }
+
+    .alert-success {
+      color: #155724;
+      background-color: #d4edda;
+      border-color: #c3e6cb;
+    }
+
+    @media (max-width: 768px) {
+      .flex-row {
+        flex-direction: column;
+        gap: 0;
+      }
+      .container {
+        padding: 1rem;
+      }
+      .card {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Smart Attendance System</h1>
+      <p class="subtitle">AI-powered attendance tracking and management</p>
+    </div>
+  </header>
+
+  <div class="container">
+    <div id="global-alert" class="alert" role="alert"></div>
+
+    <!-- Check Individual Attendance -->
+    <div class="card">
+      <h2 class="card-title">Check Student Attendance</h2>
+      <div class="form-group">
+        <label for="check-date">Date</label>
+        <input type="date" id="check-date" required>
+      </div>
+      <div class="form-group">
+        <label for="check-subject">Subject</label>
+        <select id="check-subject" required>
+          <option value="">Select a subject</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="check-roll">Roll Number</label>
+        <input type="text" id="check-roll" placeholder="Enter roll number" required>
+      </div>
+      <button id="check-attendance-btn">Check Attendance</button>
+      <span id="check-loading" class="loading" style="display: none;"></span>
+      <div id="check-result" class="result-container">
+        <h3 class="result-title">Attendance Status</h3>
+        <div id="attendance-status"></div>
+      </div>
+    </div>
+
+    <!-- Student Attendance Summary -->
+    <div class="card">
+      <h2 class="card-title">Student Attendance Summary</h2>
+      <div class="form-group">
+        <label for="summary-roll">Roll Number</label>
+        <input type="text" id="summary-roll" placeholder="Enter roll number" required>
+      </div>
+      <div class="flex-row">
+        <div class="form-group">
+          <label for="start-date">Start Date (Optional)</label>
+          <input type="date" id="start-date">
+        </div>
+        <div class="form-group">
+          <label for="end-date">End Date (Optional)</label>
+          <input type="date" id="end-date">
+        </div>
+      </div>
+      <button id="summary-btn">Get Summary</button>
+      <span id="summary-loading" class="loading" style="display: none;"></span>
+      <div id="summary-result" class="result-container">
+        <h3 class="result-title">Attendance Summary for Roll <span id="roll-number"></span></h3>
+        <p>Total Present Days: <span id="total-days" class="present"></span></p>
+        <p>Attendance Percentage: <span id="attendance-percentage" class="present"></span>%</p>
+        <p>Dates Present:</p>
+        <div id="dates-list" class="date-list"></div>
+        <table class="attendance-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Subject</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="summary-table-body">
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Subject-wise Attendance -->
+    <div class="card">
+      <h2 class="card-title">Subject Attendance Records</h2>
+      <div class="form-group">
+        <label for="subject-date">Date</label>
+        <input type="date" id="subject-date" required>
+      </div>
+      <div class="form-group">
+        <label for="subject-name">Subject</label>
+        <select id="subject-name" required>
+          <option value="">Select a subject</option>
+        </select>
+      </div>
+      <div class="flex-row">
+        <button id="view-subject-btn">View Attendance</button>
+        <button id="export-subject-btn" class="btn-secondary">Export as Excel</button>
+      </div>
+      <span id="subject-loading" class="loading" style="display: none;"></span>
+      <div id="subject-result" class="result-container">
+        <h3 class="result-title">Attendance Records</h3>
+        <table class="attendance-table">
+          <thead>
+            <tr>
+              <th>Roll Number</th>
+              <th>Time</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="subject-attendance-list">
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Date Range Attendance -->
+    <div class="card">
+      <h2 class="card-title">Date Range Attendance</h2>
+      <div class="flex-row">
+        <div class="form-group">
+          <label for="range-start-date">Start Date</label>
+          <input type="date" id="range-start-date" required>
+        </div>
+        <div class="form-group">
+          <label for="range-end-date">End Date</label>
+          <input type="date" id="range-end-date" required>
+        </div>
+      </div>
+      <div class="flex-row">
+        <button id="view-range-btn">View Records</button>
+        <button id="export-range-btn" class="btn-secondary">Export as Excel</button>
+      </div>
+      <span id="range-loading" class="loading" style="display: none;"></span>
+      <div id="range-result" class="result-container">
+        <h3 class="result-title">Attendance Records</h3>
+        <div id="range-attendance-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const API_BASE = 'http://127.0.0.1:8000';
+      const globalAlert = document.getElementById('global-alert');
+
+      function showAlert(message, type = 'danger') {
+        globalAlert.textContent = message;
+        globalAlert.className = alert alert-${type};
+        globalAlert.style.display = 'block';
+        setTimeout(() => {
+          globalAlert.style.display = 'none';
+        }, 5000);
+      }
+
+      async function handleApiCall(url, options = {}) {
+        try {
+          const response = await fetch(url, options);
+          if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.detail || 'Request failed');
+          }
+          return await response.json();
+        } catch (error) {
+          console.error('API Error:', error);
+          showAlert(error.message);
+          throw error;
+        }
+      }
+
+      async function loadSubjects(dateInput, targetSelectId) {
+        const select = document.getElementById(targetSelectId);
+        select.innerHTML = '<option value="">Loading subjects...</option>';
+        
+        if (!dateInput) {
+          select.innerHTML = '<option value="">Select a date first</option>';
+          return;
+        }
+
+        try {
+          const data = await handleApiCall(${API_BASE}/subjects/?date=${dateInput});
+          select.innerHTML = '<option value="">Select a subject</option>';
+          
+          if (data.available_subjects && data.available_subjects.length > 0) {
+            data.available_subjects.forEach(subject => {
+              const option = document.createElement('option');
+              option.value = subject;
+              option.textContent = subject;
+              select.appendChild(option);
+            });
+          } else {
+            select.innerHTML = '<option value="">No subjects available</option>';
+          }
+        } catch (error) {
+          select.innerHTML = '<option value="">Error loading subjects</option>';
+        }
+      }
+
+      // Initialize with today's date and set up event listeners
+      function initializeDateFields() {
+        const today = new Date().toISOString().split('T')[0];
+        const dateFields = ['check-date', 'subject-date', 'range-start-date', 'range-end-date'];
+        
+        dateFields.forEach(id => {
+          const el = document.getElementById(id);
+          el.value = today;
+          
+          if (id === 'check-date' || id === 'subject-date') {
+            el.addEventListener('change', function() {
+              const targetSelectId = id === 'check-date' ? 'check-subject' : 'subject-name';
+              loadSubjects(this.value, targetSelectId);
+            });
+            // Trigger change event to load subjects
+            el.dispatchEvent(new Event('change'));
+          }
+        });
+      }
+
+      // Check Individual Attendance
+      document.getElementById('check-attendance-btn').addEventListener('click', async function() {
+        const date = document.getElementById('check-date').value;
+        const subject = document.getElementById('check-subject').value;
+        const roll = document.getElementById('check-roll').value;
+        
+        if (!date || !subject || !roll) {
+          showAlert('Please fill all fields');
+          return;
+        }
+
+        const resultContainer = document.getElementById('check-result');
+        const statusElement = document.getElementById('attendance-status');
+        const loadingElement = document.getElementById('check-loading');
+        
+        loadingElement.style.display = 'inline-block';
+        resultContainer.style.display = 'none';
+
+        try {
+          const data = await handleApiCall(${API_BASE}/daily_attendance/${date}/${roll}/${subject});
+          
+          if (data.status === 'Present') {
+            statusElement.innerHTML = `
+              <p class="present">✅ Present</p>
+              <p>Entry Times: ${data.times.join(', ')}</p>
+              <p>Total Entries: ${data.times.length}</p>`;
+          } else {
+            statusElement.innerHTML = '<p class="absent">❌ Absent</p>';
+          }
+          resultContainer.style.display = 'block';
+        } finally {
+          loadingElement.style.display = 'none';
+        }
+      });
+
+      // Student Attendance Summary
+      document.getElementById('summary-btn').addEventListener('click', async function() {
+        const roll = document.getElementById('summary-roll').value;
+        const startDate = document.getElementById('start-date').value;
+        const endDate = document.getElementById('end-date').value;
+        
+        if (!roll) {
+          showAlert('Please enter a roll number');
+          return;
+        }
+
+        const resultContainer = document.getElementById('summary-result');
+        const loadingElement = document.getElementById('summary-loading');
+        
+        loadingElement.style.display = 'inline-block';
+        resultContainer.style.display = 'none';
+
+        try {
+          let url = ${API_BASE}/student/summary/${roll};
+          if (startDate && endDate) {
+            url += ?start_date=${startDate}&end_date=${endDate};
+          } else if (startDate) {
+            url += ?start_date=${startDate};
+          } else if (endDate) {
+            url += ?end_date=${endDate};
+          }
+
+          const data = await handleApiCall(url);
+          
+          document.getElementById('roll-number').textContent = roll;
+          document.getElementById('total-days').textContent = data.attendance.length;
+          
+          // Calculate attendance percentage (example calculation)
+          const totalDays = data.attendance.length;
+          const presentDays = data.attendance.filter(a => a.status === 'Present').length;
+          const percentage = totalDays > 0 ? Math.round((presentDays / totalDays) * 100) : 0;
+          document.getElementById('attendance-percentage').textContent = percentage;
+          
+          // Populate dates list
+          const datesList = document.getElementById('dates-list');
+          datesList.innerHTML = '';
+          data.attendance.forEach(record => {
+            const chip = document.createElement('span');
+            chip.className = 'date-chip';
+            chip.textContent = record.date;
+            datesList.appendChild(chip);
+          });
+          
+          // Populate table
+          const tableBody = document.getElementById('summary-table-body');
+          tableBody.innerHTML = '';
+          data.attendance.forEach(record => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${record.date}</td>
+              <td>${record.subject}</td>
+              <td class="${record.status === 'Present' ? 'present' : 'absent'}">
+                ${record.status === 'Present' ? 'Present' : 'Absent'}
+              </td>
+            `;
+            tableBody.appendChild(row);
+          });
+          
+          resultContainer.style.display = 'block';
+        } finally {
+          loadingElement.style.display = 'none';
+        }
+      });
+
+      // Subject Attendance Records
+      document.getElementById('view-subject-btn').addEventListener('click', async function() {
+        const date = document.getElementById('subject-date').value;
+        const subject = document.getElementById('subject-name').value;
+        
+        if (!date || !subject) {
+          showAlert('Please select both date and subject');
+          return;
+        }
+
+        const resultContainer = document.getElementById('subject-result');
+        const loadingElement = document.getElementById('subject-loading');
+        const tableBody = document.getElementById('subject-attendance-list');
+        
+        loadingElement.style.display = 'inline-block';
+        resultContainer.style.display = 'none';
+
+        try {
+          const data = await handleApiCall(${API_BASE}/attendance/records?date=${date}&subject=${subject});
+          
+          tableBody.innerHTML = '';
+          if (data.attendance && data.attendance.length > 0) {
+            data.attendance.forEach(record => {
+              const row = document.createElement('tr');
+              row.innerHTML = `
+                <td>${record.roll_number}</td>
+                <td>${record.timestamp}</td>
+                <td class="present">Present</td>
+              `;
+              tableBody.appendChild(row);
+            });
+          } else {
+            tableBody.innerHTML = '<tr><td colspan="3">No attendance records found</td></tr>';
+          }
+          
+          resultContainer.style.display = 'block';
+        } finally {
+          loadingElement.style.display = 'none';
+        }
+      });
+
+      // Export Subject Attendance
+      document.getElementById('export-subject-btn').addEventListener('click', async function() {
+        const date = document.getElementById('subject-date').value;
+        const subject = document.getElementById('subject-name').value;
+        
+        if (!date || !subject) {
+          showAlert('Please select both date and subject');
+          return;
+        }
+
+        try {
+          const response = await fetch(${API_BASE}/export/records?date=${date}&subject=${subject});
+          if (!response.ok) throw new Error('Export failed');
+          
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = attendance_${date}_${subject}.xlsx;
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          a.remove();
+          
+          showAlert('Export successful!', 'success');
+        } catch (error) {
+          showAlert(error.message);
+        }
+      });
+
+      // Initialize the application
+      initializeDateFields();
+    });
+  </script>
+</body>
+</html>
